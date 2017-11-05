@@ -10,6 +10,7 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
 import org.neo4j.driver.v1.TransactionWork;
 
+import br.com.modelo.Grupo;
 import br.com.modelo.Pessoa;
 import br.com.modelo.Relacionamento;
 
@@ -57,19 +58,19 @@ public class Operacoes extends Conexao {
 	}
 
 	protected Void criarNodoPessoa(Transaction transaction, Pessoa pessoa) {
-		transaction.run("CREATE (a:Person {nome: $nome, idade: $idade})",
+		transaction.run("CREATE (a:Pessoa {nome: $nome, idade: $idade})",
 				parameters("nome", pessoa.getNome(), "idade", pessoa.getIdade()));
 		return null;
 	}
 
 	public long combinarPessoaNodo(Transaction transaction, Pessoa pessoa) {
-		StatementResult result = transaction.run("MATCH (a:Person {nome: $nome}) RETURN id(a)",
+		StatementResult result = transaction.run("MATCH (a:Pessoa {nome: $nome}) RETURN id(a)",
 				parameters("nome", pessoa.getNome()));
 
 		return result.single().get(0).asLong();
 	}
 
-	public void adicionarRelacionamento(final String nomeA, final String definicaoA, final String nomeB,
+	public void adicionarRelacionamentoEntreAmigos(final String nomeA, final String definicaoA, final String nomeB,
 			final String definicaoB, final Relacionamento relacionamento) {
 		try (Session session = this.driver.session()) {
 			session.writeTransaction(new TransactionWork<Void>() {
@@ -81,6 +82,52 @@ public class Operacoes extends Conexao {
 							+ relacionamento.getValor() + "{nome: \"" + relacionamento.getChave() + "\"}]->(b), "
 							+ "(b)-[r2:" + relacionamento.getValor() + "{nome: \"" + relacionamento.getChave()
 							+ "\"}]->(a)" + "RETURN a.nome, r1.nome, b.nome, r2.nome";
+
+					StatementResult result = transaction.run(statement);
+					result.list().forEach(r -> System.out.println(r));
+					return null;
+				}
+			});
+		}
+	}
+
+	public long adicionarGrupo(Grupo grupo) {
+		try (Session session = this.driver.session()) {
+			session.writeTransaction(new TransactionWork<Void>() {
+				@Override
+				public Void execute(Transaction transaction) {
+					return Operacoes.this.criarNodoGrupo(transaction, grupo);
+				}
+			});
+			return session.readTransaction(new TransactionWork<Long>() {
+				@Override
+				public Long execute(Transaction transaction) {
+					return Operacoes.this.combinarGrupoNodo(transaction, grupo);
+				}
+			});
+		}
+	}
+
+	protected Void criarNodoGrupo(Transaction transaction, Grupo grupo) {
+		transaction.run("CREATE (a:Grupo {nome: $nome})", parameters("nome", grupo.getNome()));
+		return null;
+	}
+
+	public long combinarGrupoNodo(Transaction transaction, Grupo grupo) {
+		StatementResult result = transaction.run("MATCH (a:Grupo {nome: $nome}) RETURN id(a)",
+				parameters("nome", grupo.getNome()));
+
+		return result.single().get(0).asLong();
+	}
+
+	public void adicionarRelacionamentoEntreGrupo(final String nomeA, final String definicaoA, final String nomeB,
+			final String definicaoB, final Relacionamento relacionamento) {
+		try (Session session = this.driver.session()) {
+			session.writeTransaction(new TransactionWork<Void>() {
+				@Override
+				public Void execute(Transaction transaction) {
+					String statement = "MATCH (a:Pessoa{" + definicaoA + ":\"" + nomeA + "\"}),(b:Grupo{" + definicaoB
+							+ ":\"" + nomeB + "\"}) MERGE (a)-[r:" + relacionamento.getValor() + "]->(b)";
 
 					StatementResult result = transaction.run(statement);
 					result.list().forEach(r -> System.out.println(r));

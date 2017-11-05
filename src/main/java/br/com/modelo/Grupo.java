@@ -4,7 +4,7 @@ public class Grupo {
 
 	private String nome;
 
-	public Grupo(String nome, Pessoa administrador) {
+	public Grupo(String nome) {
 		this.nome = nome;
 	}
 
