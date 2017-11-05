@@ -2,7 +2,7 @@ package br.com.modelo;
 
 public enum Relacionamento {
 
-	PARTICIPA("participa", "PARTICIPA"), AMIGO_DE("amigo_de", "AMIGO DE");
+	PARTICIPA("participa", "PARTICIPA"), AMIGO_DE("amigo_de", "AMIGO_DE");
 
 	private final String chave;
 	private final String valor;

@@ -26,11 +26,14 @@ public class Principal {
 		operacoes.adicionarPessoa(new Pessoa("Bruno", 21));
 		operacoes.rodarExpressao("MATCH (a) WHERE a.name = \"Bruno\" OPTIONAL MATCH (a)-[r]->() RETURN a.nome, a.idade");
 		
+		operacoes.adicionarPessoa(new Pessoa("Gabriell", 21));
+		operacoes.rodarExpressao("MATCH (a) WHERE a.name = \"Gabriell\" OPTIONAL MATCH (a)-[r]->() RETURN a.nome, a.idade");
+		
 		System.out.println("[INFO] adicionando os nodos para os grupos");
 		//TODO:
 		
 		System.out.println("[INFO] criando as relações");
-		//operacoes.adicionarRelacionamento("Emanoel", "Pessoa", "Bruno", "Pessoa", Relacionamento.AMIGO_DE);
+		operacoes.adicionarRelacionamento("Emanoel", "Pessoa", "Bruno", "Pessoa", Relacionamento.AMIGO_DE);
 	}
 
 }

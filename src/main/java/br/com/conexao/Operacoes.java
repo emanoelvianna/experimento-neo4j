@@ -76,14 +76,11 @@ public class Operacoes extends Conexao {
 				@Override
 				public Void execute(Transaction transaction) {
 
-					// @formatter:off;
-					// FIXME: make it generic
 					String statement = "MATCH (a:" + definicaoA + ") , (b:" + definicaoB + ") " + "WHERE a.nome = \""
 							+ nomeA + "\" AND b.nome = \"" + nomeB + "\" " + "CREATE (a)-[r1:"
 							+ relacionamento.getValor() + "{nome: \"" + relacionamento.getChave() + "\"}]->(b), "
 							+ "(b)-[r2:" + relacionamento.getValor() + "{nome: \"" + relacionamento.getChave()
 							+ "\"}]->(a)" + "RETURN a.nome, r1.nome, b.nome, r2.nome";
-					// @formatter:on
 
 					StatementResult result = transaction.run(statement);
 					result.list().forEach(r -> System.out.println(r));
