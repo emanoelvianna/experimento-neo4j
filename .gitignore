@@ -1,0 +1,13 @@
+**/target/
+**/*.settings
+**/*.project
+**/*.classpath
+/*/*.iml
+*.jsfdia
+*.metadata
+**/.idea
+*.iml
+*.swp
+*.swo
+**/unit-result.report.html
+/**/env.properties

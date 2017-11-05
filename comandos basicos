@@ -1,0 +1,11 @@
+- Para INICIAR a base de dados:
+
+sudo service neo4j start
+
+- Para PARAR a base de dados:
+
+sudo service neo4j stop
+
+- Para remover todo a base de dados:
+
+MATCH(n) OPTIONAL MATCH (n)-[r]-() DELETE n,r
