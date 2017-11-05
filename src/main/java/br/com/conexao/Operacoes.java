@@ -70,18 +70,18 @@ public class Operacoes extends Conexao {
 		return result.single().get(0).asLong();
 	}
 
-	public void adicionarRelacionamentoEntreAmigos(final String nomeA, final String definicaoA, final String nomeB,
-			final String definicaoB, final Relacionamento relacionamento) {
+	public void adicionarRelacionamentoEntreAmigos(final String nomeA, final String nomeB,
+			final Relacionamento relacionamento) {
 		try (Session session = this.driver.session()) {
 			session.writeTransaction(new TransactionWork<Void>() {
 				@Override
 				public Void execute(Transaction transaction) {
 
-					String statement = "MATCH (a:" + definicaoA + ") , (b:" + definicaoB + ") " + "WHERE a.nome = \""
-							+ nomeA + "\" AND b.nome = \"" + nomeB + "\" " + "CREATE (a)-[r1:"
-							+ relacionamento.getValor() + "{nome: \"" + relacionamento.getChave() + "\"}]->(b), "
-							+ "(b)-[r2:" + relacionamento.getValor() + "{nome: \"" + relacionamento.getChave()
-							+ "\"}]->(a)" + "RETURN a.nome, r1.nome, b.nome, r2.nome";
+					String statement = "MATCH (a:Pessoa) , (b:Pessoa) " + "WHERE a.nome = \"" + nomeA
+							+ "\" AND b.nome = \"" + nomeB + "\" " + "CREATE (a)-[r1:" + relacionamento.getValor()
+							+ "{nome: \"" + relacionamento.getChave() + "\"}]->(b), " + "(b)-[r2:"
+							+ relacionamento.getValor() + "{nome: \"" + relacionamento.getChave() + "\"}]->(a)"
+							+ "RETURN a.nome, r1.nome, b.nome, r2.nome";
 
 					StatementResult result = transaction.run(statement);
 					result.list().forEach(r -> System.out.println(r));
@@ -120,14 +120,15 @@ public class Operacoes extends Conexao {
 		return result.single().get(0).asLong();
 	}
 
-	public void adicionarRelacionamentoEntreGrupo(final String nomeA, final String definicaoA, final String nomeB,
-			final String definicaoB, final Relacionamento relacionamento) {
+	public void adicionarRelacionamentoEntreGrupo(final String nomeA, final String nomeB,
+			final Relacionamento relacionamento) {
 		try (Session session = this.driver.session()) {
 			session.writeTransaction(new TransactionWork<Void>() {
 				@Override
 				public Void execute(Transaction transaction) {
-					String statement = "MATCH (a:Pessoa{" + definicaoA + ":\"" + nomeA + "\"}),(b:Grupo{" + definicaoB
-							+ ":\"" + nomeB + "\"}) MERGE (a)-[r:" + relacionamento.getValor() + "]->(b)";
+
+					String statement = "MATCH (a:Pessoa {nome:\"" + nomeA + "\"}),(b:Grupo{nome:\"" + nomeB
+							+ "\"}) MERGE (a)-[r:" + relacionamento.getValor() + "]->(b)";
 
 					StatementResult result = transaction.run(statement);
 					result.list().forEach(r -> System.out.println(r));

@@ -22,27 +22,24 @@ public class Principal {
 
 		System.out.println("[INFO] adicionando os nodos para pessoas");
 		operacoes.adicionarPessoa(new Pessoa("Emanoel", 23));
-		operacoes.rodarExpressao("MATCH (a) WHERE a.name = \"Emanoel\" OPTIONAL MATCH (a)-[r]->() RETURN a.nome, a.idade");
-		
+
 		operacoes.adicionarPessoa(new Pessoa("Bruno", 21));
-		operacoes.rodarExpressao("MATCH (a) WHERE a.name = \"Bruno\" OPTIONAL MATCH (a)-[r]->() RETURN a.nome, a.idade");
-		
+
 		operacoes.adicionarPessoa(new Pessoa("Gabriell", 21));
-		operacoes.rodarExpressao("MATCH (a) WHERE a.name = \"Gabriell\" OPTIONAL MATCH (a)-[r]->() RETURN a.nome, a.idade");
-		
+
 		System.out.println("[INFO] adicionando os nodos para os grupos");
 		operacoes.adicionarGrupo(new Grupo("PUCRS"));
-		
+
 		System.out.println("[INFO] criando as relações para amigos");
-		operacoes.adicionarRelacionamentoEntreAmigos("Emanoel", "Pessoa", "Bruno", "Pessoa", Relacionamento.AMIGO_DE);
-		operacoes.adicionarRelacionamentoEntreAmigos("Emanoel", "Pessoa", "Gabriell", "Pessoa", Relacionamento.AMIGO_DE);
-		operacoes.adicionarRelacionamentoEntreAmigos("Gabriell", "Pessoa", "Bruno", "Pessoa", Relacionamento.AMIGO_DE);
-		
+		operacoes.adicionarRelacionamentoEntreAmigos("Emanoel", "Bruno", Relacionamento.AMIGO_DE);
+		operacoes.adicionarRelacionamentoEntreAmigos("Emanoel", "Gabriell", Relacionamento.AMIGO_DE);
+		operacoes.adicionarRelacionamentoEntreAmigos("Gabriell", "Bruno", Relacionamento.AMIGO_DE);
+
 		System.out.println("[INFO] criando as relações para grupos");
-		operacoes.adicionarRelacionamentoEntreAmigos("Emanoel", "Pessoa", "PUCRS", "Grupo", Relacionamento.PARTICIPA);
-		operacoes.adicionarRelacionamentoEntreAmigos("Bruno", "Pessoa", "PUCRS", "Grupo", Relacionamento.PARTICIPA);
-		operacoes.adicionarRelacionamentoEntreAmigos("Gabriell", "Pessoa", "PUCRS", "Grupo", Relacionamento.PARTICIPA);
-		
+		operacoes.adicionarRelacionamentoEntreGrupo("Emanoel", "PUCRS", Relacionamento.PARTICIPA);
+		operacoes.adicionarRelacionamentoEntreGrupo("Bruno", "PUCRS", Relacionamento.PARTICIPA);
+		operacoes.adicionarRelacionamentoEntreGrupo("Gabriell", "PUCRS", Relacionamento.PARTICIPA);
+
 		System.out.println("[INFO] base de dados criada");
 	}
 
